@@ -1,0 +1,118 @@
+.background-image {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+}
+.all-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.disabled {
+  filter: brightness(50%);
+}
+
+.text {
+  color: white;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.window-options-menu-panel {
+  .menu-panel {
+    height: 100vh;
+    width: 12vw;
+
+    .window-options-container {
+      display: flex;
+      flex-direction: column;
+      margin-top: 18vh;
+    }
+
+    .button-with-text {
+      margin-top: 8vh;
+
+      .icon {
+        width: 7vw;
+        height: 7vw;
+      }
+    }
+  }
+}
+
+.page-selection-menu-panel {
+  .menu-panel {
+    overflow: scroll;
+    height: 100vh;
+    width: 24vw;
+  }
+
+  .pages-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .button-with-text {
+    margin-top: 8vh;
+
+    .icon {
+      width: 6vw;
+      height: 6vw;
+    }
+    .text {
+      font-size: 1.5vw;
+    }
+  }
+}
+
+.menu-panel {
+  z-index: 1000;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+
+  background: linear-gradient(
+      229.06deg,
+      rgba(255, 255, 255, 0.1) 27.88%,
+      rgba(0, 0, 0, 0) 90.14%
+    ),
+    #2d3f56;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
+
+  .text {
+    line-height: 3vw;
+  }
+
+  .menu-title {
+    margin-top: 6vh;
+    text-align: center;
+    font-size: 2.5vw;
+  }
+}
+
+.button-with-text {
+  .icon {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  display: flex;
+  flex-direction: column;
+
+  .text {
+    line-height: 3vw;
+  }
+
+  .text {
+    text-align: center;
+    font-size: 1.5vw;
+  }
+}
+
+#add-window-button {
+  position: fixed;
+  bottom: 1.5vw;
+  right: 1.5vw;
+  width: 12vh;
+  height: 12vh;
+}
