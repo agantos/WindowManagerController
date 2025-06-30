@@ -34,7 +34,6 @@ export class WindowManagerComponent implements OnInit {
   windowsElementRefContainer: QueryList<ElementRef<HTMLInputElement>>;
 
   constructor(private cd: ChangeDetectorRef) {
-    this.windows = [];
     this.colors = [
       'light-green',
       'red',
@@ -49,6 +48,8 @@ export class WindowManagerComponent implements OnInit {
     this.windows = [];
   }
 
+  ngAfterViewInit() { }
+
   ngOnInit(): void {
     ControllerSocket.socket.on('Server_SendShortcuts', (shortcutsJSON: any) => {
       this.shortcuts = shortcutsJSON.shortcuts;
@@ -62,40 +63,32 @@ export class WindowManagerComponent implements OnInit {
         );
       });
     });
-    ControllerSocket.socket.on(
-      'Server_SendZorderedWindows',
-      (zorderedWindows: any) => {
-        this.translateHorizontal =
-          this.allContainer.nativeElement.getBoundingClientRect().width / 3840;
-        this.translateVertical =
-          this.allContainer.nativeElement.getBoundingClientRect().height / 1200;
-        this.windows = [];
 
-        zorderedWindows.forEach((win: any) => {
-          win.bounds.x *= this.translateHorizontal;
-          win.bounds.width *= this.translateHorizontal;
-          win.bounds.y *= this.translateVertical;
-          win.bounds.height *= this.translateVertical;
-          this.windows.push(
-            new WindowInformationHolder(
-              new Bounds(
-                win.bounds.x,
-                win.bounds.y,
-                win.bounds.width,
-                win.bounds.height
-              ),
-              win.url,
-              win.id
-            )
-          );
-          this.cd.detectChanges();
-          this.PositionWindowsOnInit();
-        });
-      }
-    );
+    ControllerSocket.socket.on('Server_SendZorderedWindows', (zorderedWindows: any[]) => {
+      const containerRect = this.allContainer.nativeElement.getBoundingClientRect();
+      this.translateHorizontal = containerRect.width / 3840;
+      this.translateVertical = containerRect.height / 1200;
+
+      this.windows = zorderedWindows.map((win) => {
+        win.bounds.x *= this.translateHorizontal;
+        win.bounds.width *= this.translateHorizontal;
+        win.bounds.y *= this.translateVertical;
+        win.bounds.height *= this.translateVertical;
+
+        return new WindowInformationHolder(
+          new Bounds(win.bounds.x, win.bounds.y, win.bounds.width, win.bounds.height),
+          win.url,
+          win.id
+        );
+      });
+
+      this.cd.detectChanges();
+      this.PositionWindowsOnInit();
+    });
+
     ControllerSocket.socket.on('Server_SendNewChildId', (id) => {
       this.unfinishedNewWindow.id = id;
-      this.unfinishedNewWindow.bounds.x *= this.translateHorizontal;
+      this.unfinishedNewWindow.bounds.x = Math.floor(Math.floor(this.unfinishedNewWindow.bounds.x) * this.translateHorizontal);
       this.unfinishedNewWindow.bounds.width *= this.translateHorizontal;
       this.unfinishedNewWindow.bounds.y *= this.translateVertical;
       this.unfinishedNewWindow.bounds.height *= this.translateVertical;
@@ -113,12 +106,14 @@ export class WindowManagerComponent implements OnInit {
         this.unfinishedNewWindow.bounds.x.toString() + 'px';
 
       this.cd.detectChanges();
+
+      console.log(this.unfinishedNewWindow)
     });
 
     this.GetWindowsZorderedInBoard();
     this.GetShortcuts();
   }
-  ngAfterViewInit() {}
+
 
   PositionWindowsOnInit() {
     let i = 0;
@@ -177,8 +172,7 @@ export class WindowManagerComponent implements OnInit {
 
   // COMMUNICATION WITH ELECTRON APP
   SendCreateWindowEvent() {
-    console.log('Open new window');
-    ControllerSocket.socket.emit('Controller_OpenNewWindow', null, null);
+    ControllerSocket.socket.emit('Controller_OpenNewWindow', { x: 450, y: 350 });
 
     this.unfinishedNewWindow = new WindowInformationHolder(
       new Bounds(450, 350, 600, 400),
@@ -215,6 +209,7 @@ export class WindowManagerComponent implements OnInit {
       position: { x: x, y: y },
     };
     ControllerSocket.socket.emit('Controller_MoveWindow', toSend);
+    console.log('Controller_MoveWindow', toSend)
   }
 
   SendChangeWindowPageEvent(url: string) {

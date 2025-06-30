@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { io } from 'socket.io-client';
-import { ControllerSocket } from './socket';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

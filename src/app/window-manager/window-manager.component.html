@@ -1,36 +1,25 @@
-<!-- <div id="GrandContainer">
-  <button class="option button" (click)="SendDefaultOpenWindowEvent()">
-    New Window
-  </button>
-  <button class="option button" (click)="GetShortcuts()">Get Shortcuts</button>
-  <button class="option button" (click)="GetWindowsZorderedInBoard()">
-    Get Windows
-  </button>
-</div> -->
 <div class="all-container">
-  <img
-    #allContainer
-    (click)="UnselectAll()"
-    class="background-image"
-    src="../../assets/images/WindowManager/background.jpg"
-  />
+  <div>
+    <img #allContainer (click)="UnselectAll()" class="background-image"
+      src="../../assets/images/WindowManager/background.jpg" />
+  </div>
 
-  <div
-    cdkDrag
-    cdkDragBoundary=".all-container"
-    [cdkDragDisabled]="false"
-    (cdkDragEnded)="SendMoveWindowEvent(i)"
-    style="position: absolute"
-    *ngFor="let window of windows; let i = index"
-    [id]="i"
-    #windowsElementRefContainer
-  >
-    <app-window
-      [windowInfo]="window"
-      [color]="colors[i % colors.length]"
-      (click)="SelectWindow(windowsElementRefContainer, window)"
-      #window
-    ></app-window>
+  <div style="
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    font-size: 3vw;
+    color: rgba(128, 128, 128, 0.3);
+    z-index: 999;
+    font-weight:400;
+  ">
+    C E N T E R
+  </div>
+
+  <div cdkDrag cdkDragBoundary=".all-container" [cdkDragDisabled]="false" (cdkDragEnded)="SendMoveWindowEvent(i)"
+    style="position: absolute" *ngFor="let window of windows; let i = index" [id]="i" #windowsElementRefContainer>
+    <app-window [windowInfo]="window" [color]="colors[i % colors.length]"
+      (click)="SelectWindow(windowsElementRefContainer, window)" #window></app-window>
   </div>
 </div>
 
@@ -39,18 +28,12 @@
     <div class="text menu-title">Window Options</div>
     <div class="window-options-container">
       <div class="button-with-text" (click)="SelectOpenPage()">
-        <img
-          class="icon"
-          src="../../assets/images/WindowManager/Menu/openPage.png"
-        />
+        <img class="icon" src="../../assets/images/WindowManager/Menu/openPage.png" />
         <div class="text">Open Page</div>
       </div>
 
       <div class="button-with-text" (click)="SendCloseWindowEvent()">
-        <img
-          class="icon"
-          src="../../assets/images/WindowManager/Menu/closeWindow.png"
-        />
+        <img class="icon" src="../../assets/images/WindowManager/Menu/closeWindow.png" />
         <div class="text">Close Window</div>
       </div>
     </div>
@@ -61,11 +44,8 @@
   <div class="menu-panel">
     <div class="text menu-title">Select Page</div>
     <div class="pages-container">
-      <div
-        (click)="SendChangeWindowPageEvent(shortcut.path)"
-        *ngFor="let shortcut of shortcuts"
-        class="button-with-text"
-      >
+      <div (click)="SendChangeWindowPageEvent(shortcut.path)" *ngFor="let shortcut of shortcuts"
+        class="button-with-text">
         <img class="icon" src="{{ shortcut.icon }}" />
         <div class="text">{{ shortcut.text }}</div>
       </div>
@@ -73,8 +53,4 @@
   </div>
 </div>
 
-<img
-  (click)="SendCreateWindowEvent()"
-  id="add-window-button"
-  src="../../assets/images/WindowManager/addWindow.png"
-/>
+<img (click)="SendCreateWindowEvent()" id="add-window-button" src="../../assets/images/WindowManager/addWindow.png" />
